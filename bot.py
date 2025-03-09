@@ -2,7 +2,7 @@ import asyncio
 import os
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import Message
-
+from sample.env import BOT_TOKEN
 # Load bot token from environment variables
 TOKEN = os.getenv("BOT_TOKEN")  # Railway will provide this
 
