@@ -1,17 +1,21 @@
+import asyncio
+import os
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import Message
-from aiogram.utils import executor
-import os
-from sample.env import BOT_TOKEN
-# Load bot token from environment variables (for security)
-TOKEN = os.getenv("BOT_TOKEN")  # Set this in Railway later
 
+# Load bot token from environment variables
+TOKEN = os.getenv("BOT_TOKEN")  # Railway will provide this
+
+# Initialize bot and dispatcher
 bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher()
 
-@dp.message_handler(commands=['start'])
+@dp.message(commands=['start'])
 async def start_command(message: Message):
     await message.answer("Welcome to Arise System! Your journey begins now.")
 
+async def main():
+    await dp.start_polling(bot)
+
 if __name__ == "__main__":
-    executor.start_polling(dp, skip_updates=True)
+    asyncio.run(main())
