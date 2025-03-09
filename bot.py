@@ -13,7 +13,7 @@ dp = Dispatcher()
 
 @dp.message(Command("start"))  # Correct command handler
 async def start_command(message: Message):
-    await message.answer("Welcome to Arise System! Your journey begins now.")
+    await message.answer("Welcome to the System! Let's get started.")
 
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)  # Prevent handling old updates
