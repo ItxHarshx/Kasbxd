@@ -2,7 +2,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import Message
 from aiogram.utils import executor
 import os
-
+from sample.env import BOT_TOKEN
 # Load bot token from environment variables (for security)
 TOKEN = os.getenv("BOT_TOKEN")  # Set this in Railway later
 
