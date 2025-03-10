@@ -20,9 +20,11 @@ async def start_command(message: Message):
     bot_info = await bot.get_me()
     bot_username = bot_info.username  
 
-    # Inline button to add bot to a group
+    # Inline buttons
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="➕ Add Bot to Group", url=f"https://t.me/{bot_username}?startgroup=true")]
+        [InlineKeyboardButton(text="➕ Add Bot to Group", url=f"https://t.me/{bot_username}?startgroup=true")],
+        [InlineKeyboardButton(text="🛠 Support", url="https://t.me/KaisenPortal"),
+         InlineKeyboardButton(text="📣 Updates", url="https://t.me/AriseUpdates")]
     ])
 
     await message.answer(text, reply_markup=keyboard)
