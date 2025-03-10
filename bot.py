@@ -13,7 +13,7 @@ dp = Dispatcher()
 
 # Function to generate the main menu
 async def send_main_menu(message_or_callback):
-    text = f"Hey, {message_or_callback.from_user.first_name}! Welcome! Click on the buttons below for more options."
+    text = f"Hey {message_or_callback.from_user.first_name}, Welcome to Arise System! Click on the buttons below for more options."
 
     bot_info = await bot.get_me()
     bot_username = bot_info.username  
@@ -38,16 +38,7 @@ async def start_command(message: Message):
 # Callback handler for "How to Use?"
 @dp.callback_query(lambda c: c.data == "how_to_use")
 async def how_to_use_callback(callback_query: CallbackQuery):
-    text = """📌 **Command Menu**:
-Here are the commands you can use:
-
-🎵 /play - Play music  
-⏸ /pause - Pause music  
-▶️ /resume - Resume music  
-⏹ /stop - Stop music  
-📃 /playlist - View your playlist  
-📢 /updates - Check latest updates  
-🛠 /support - Get help  
+    text = """📌 *Command Menu*:
 
 Click "Back" to return."""
 
