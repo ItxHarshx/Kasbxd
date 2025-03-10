@@ -14,7 +14,7 @@ dp = Dispatcher()
 @dp.message(Command("start"))
 async def start_command(message: Message):
     user_name = message.from_user.first_name  
-    text = f"Welcome, {user_name}! Everything is set up and ready. Whenever you're ready, just begin."
+    text = f"Hey, {user_name}! Welcome to the System! Let's get started."
 
     # Get bot username dynamically
     bot_info = await bot.get_me()
