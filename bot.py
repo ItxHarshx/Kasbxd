@@ -1,7 +1,7 @@
 import asyncio
 import os
 from aiogram import Bot, Dispatcher, types
-from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from aiogram.filters import Command
 
 # Load bot token from environment variables
@@ -11,23 +11,56 @@ TOKEN = os.getenv("BOT_TOKEN")
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-@dp.message(Command("start"))
-async def start_command(message: Message):
-    user_name = message.from_user.first_name  
-    text = f"Hey, {user_name}! Welcome to the System! Let's get started."
+# Function to generate the main menu
+async def send_main_menu(message_or_callback):
+    text = f"Hey, {message_or_callback.from_user.first_name}! Welcome! Click on the buttons below for more options."
 
-    # Get bot username dynamically
     bot_info = await bot.get_me()
     bot_username = bot_info.username  
 
-    # Inline buttons
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="➕ Add Bot to Group", url=f"https://t.me/{bot_username}?startgroup=true")],
-        [InlineKeyboardButton(text="🛠 Support", url="https://t.me/KaisenPortal"),
-         InlineKeyboardButton(text="📣 Updates", url="https://t.me/AriseUpdates")]
+        [InlineKeyboardButton(text="📢 Updates", url="https://t.me/YOUR_UPDATES_CHANNEL"),
+         InlineKeyboardButton(text="🛠 Support", url="https://t.me/YOUR_SUPPORT_GROUP")],
+        [InlineKeyboardButton(text="❓ How to Use? Command Menu", callback_data="how_to_use")]
     ])
 
-    await message.answer(text, reply_markup=keyboard)
+    if isinstance(message_or_callback, Message):
+        await message_or_callback.answer(text, reply_markup=keyboard)
+    else:  # If it's a callback query
+        await message_or_callback.message.edit_text(text, reply_markup=keyboard)
+
+# Start command handler
+@dp.message(Command("start"))
+async def start_command(message: Message):
+    await send_main_menu(message)
+
+# Callback handler for "How to Use?"
+@dp.callback_query(lambda c: c.data == "how_to_use")
+async def how_to_use_callback(callback_query: CallbackQuery):
+    text = """📌 **Command Menu**:
+Here are the commands you can use:
+
+🎵 /play - Play music  
+⏸ /pause - Pause music  
+▶️ /resume - Resume music  
+⏹ /stop - Stop music  
+📃 /playlist - View your playlist  
+📢 /updates - Check latest updates  
+🛠 /support - Get help  
+
+Click "Back" to return."""
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🔙 Back", callback_data="back_to_start")]
+    ])
+
+    await callback_query.message.edit_text(text, reply_markup=keyboard)
+
+# Callback handler to go back to the start
+@dp.callback_query(lambda c: c.data == "back_to_start")
+async def back_to_start(callback_query: CallbackQuery):
+    await send_main_menu(callback_query)
 
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)  # Prevent handling old updates
